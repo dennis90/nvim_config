@@ -30,6 +30,8 @@ return require("packer").startup(function(use)
   use("nvim-lualine/lualine.nvim")
   use("kyazdani42/nvim-web-devicons")
   use { "nvim-telescope/telescope-fzf-native.nvim", run = "make", cond = vim.fn.executable "make" == 1 }
+  use("windwp/nvim-ts-autotag")
+  use("windwp/nvim-autopairs")
   use {
 	  "VonHeikemen/lsp-zero.nvim",
 	  requires = {
