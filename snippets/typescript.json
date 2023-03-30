@@ -1,0 +1,33 @@
+{
+  "mock_launch_darkly": {
+    "prefix": "ldmock",
+    "body": [
+      "import useFlags from 'hooks/useFlags'",
+      "jest.mock('hooks/useFlags', () =>",
+      "  jest.fn().mockReturnValue({",
+      "    data: { $1: true },",
+      "    status: 'loaded',",
+      "  }),",
+      ");",
+      "// How to use:",
+      "// (useFlags as jest.Mock).mockReturnValue({",
+      "//   data: {",
+      "//    feNotificationsModule: undefined,",
+      "//  },",
+      "//    status: 'loading',",
+      "//  });"
+    ]
+  },
+
+  "mock_fetch": {
+    "prefix": "fetchmock",
+    "body": [
+      "import * as fetchers from 'services/fetch';",
+      "const fetchRootSpy = jest.spyOn(fetchers, 'fetchRoot');",
+      "// Add to beforeEach",
+      "fetchRootSpy.mockClear();",
+      "// How to use:",
+      "expect(fetchRootSpy).toHaveBeenLastCalledWith('$1', {$2});"
+    ]
+  }
+}
