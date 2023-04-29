@@ -288,4 +288,18 @@ local function copy_file_path()
 	vim.fn.setreg("+", path)
 	vim.notify("Copied " .. path .. " to clipboard")
 end
+
 vim.keymap.set("n", "<leader>cf", copy_file_path, { noremap = true, silent = true, desc = "Copy file path" })
+
+vim.keymap.set(
+	"n",
+	"L",
+	"<cmd> call search('\\u')<CR>",
+	{ noremap = true, silent = true, desc = "Go to next camel case word" }
+)
+
+function ChangeDirectory()
+	vim.cmd("cd %:p:h")
+end
+
+vim.cmd("command! ChangeDir lua ChangeDirectory()")
