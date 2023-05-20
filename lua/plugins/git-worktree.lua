@@ -1,8 +1,18 @@
+local ok, Worktree = pcall(require, "git-worktree")
+
+if ok ~= false then
+	Worktree.on_tree_change(function(op, metadata)
+		if op == Worktree.Operations.Create then
+			print("Switched from " .. metadata.path .. " to " .. metadata.branch .. " branch" .. metadata.upstream)
+		end
+	end)
+end
+
 local function create_worktree()
 	local worktree = require("git-worktree")
 
 	local branch_name = ""
-	local origin_branch_name = "qa"
+	-- local origin_branch_name = "qa"
 
 	vim.ui.input({
 		prompt = "New branch name: ",
@@ -10,17 +20,15 @@ local function create_worktree()
 		branch_name = input
 	end)
 
-	vim.ui.input({
-		prompt = "Origin branch name (qa): ",
-	}, function(input)
-		if input ~= "" then
-			origin_branch_name = input
-		end
-	end)
+	-- vim.ui.input({
+	-- 	prompt = "Origin branch name (qa): ",
+	-- }, function(input)
+	-- 	if input ~= "" then
+	-- 		origin_branch_name = input
+	-- 	end
+	-- end)
 
-	print(branch_name, origin_branch_name)
-
-	worktree.create_worktree(branch_name, origin_branch_name, "origin")
+	worktree.create_worktree(branch_name, branch_name, "origin")
 end
 
 local function switch_branch()
@@ -77,12 +85,12 @@ return {
 			end,
 			desc = "[G]it [L]ist [B]ranches",
 		},
-		{
-			"<leader>gcb",
-			function()
-				require("telescope").extensions.git_worktree.create_git_worktree()
-			end,
-			desc = "[G]it [C]reate [B]ranch",
-		},
+		-- {
+		-- 	"<leader>gcb",
+		-- 	function()
+		-- 		require("telescope").extensions.git_worktree.create_git_worktree()
+		-- 	end,
+		-- 	desc = "[G]it [C]reate [B]ranch",
+		-- },
 	},
 }

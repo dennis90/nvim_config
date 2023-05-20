@@ -140,6 +140,41 @@ lsp.setup()
 local null_ls = require("null-ls")
 local null_opts = lsp.build_options("null-ls", {})
 
+-- Start Format ts errors
+local lspconfig = require("lspconfig")
+
+lspconfig.tsserver.setup({
+	handlers = {
+		["textDocument/publishDiagnostics"] = function(_, result, ctx, config)
+			if result.diagnostics == nil then
+				return
+			end
+
+			-- ignore some tsserver diagnostics
+			local idx = 1
+			while idx <= #result.diagnostics do
+				local entry = result.diagnostics[idx]
+
+				local formatter = require("format-ts-errors")[entry.code]
+				entry.message = formatter and formatter(entry.message) or entry.message
+
+				-- codes: https://github.com/microsoft/TypeScript/blob/main/src/compiler/diagnosticMessages.json
+				if entry.code == 80001 then
+					-- { message = "File is a CommonJS module; it may be converted to an ES module.", }
+					table.remove(result.diagnostics, idx)
+				else
+					idx = idx + 1
+				end
+			end
+
+			vim.lsp.diagnostic.on_publish_diagnostics(_, result, ctx, config)
+		end,
+	},
+})
+
+-- End Format ts errors
+
+-- Start Import sorter
 local function format_imports()
 	vim.cmd("write", { silent = true })
 	vim.fn.system("format-imports " .. vim.fn.expand("%"))
@@ -147,8 +182,8 @@ local function format_imports()
 	vim.notify("Formatted imports")
 end
 
--- Import sorter
 vim.keymap.set("n", "<leader>o", format_imports, { noremap = true, silent = true, desc = "Format imports" })
+-- End Import sorter
 
 null_ls.setup({
 	on_attach = function(client, bufnr)

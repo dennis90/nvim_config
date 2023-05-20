@@ -14,6 +14,7 @@ return {
 		keys = { { "<leader>gs", "<CMD>Git<CR>" } },
 	},
 	"folke/neodev.nvim",
+	"davidosomething/format-ts-errors.nvim",
 	{
 		"lewis6991/gitsigns.nvim",
 		config = function()
