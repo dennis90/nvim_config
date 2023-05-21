@@ -226,7 +226,7 @@ require("mason-null-ls").setup({
 -- See `:help nvim-treesitter`
 require("nvim-treesitter.configs").setup({
 	-- Add languages to be installed here that you want installed for treesitter
-	ensure_installed = { "lua", "python", "rust", "typescript", "help", "vim", "tsx" },
+	ensure_installed = { "lua", "python", "rust", "typescript", "vimdoc", "vim", "tsx" },
 
 	autotag = { enable = true },
 	autopairs = { enable = true },
