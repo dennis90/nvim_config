@@ -133,6 +133,22 @@ lsp.on_attach(function(client, bufnr)
 	nmap("<leader>ws", require("telescope.builtin").lsp_dynamic_workspace_symbols, "[W]orkspace [S]ymbols")
 end)
 
+require("mason-lspconfig").setup({
+	ensure_installed = {
+		"bashls",
+		"cssls",
+		"dockerls",
+		"emmet-ls",
+		"eslint",
+		"jsonls",
+		"lua-language-server",
+		"prismals",
+		"tailwindcss",
+		"tsserver",
+		"yamlls",
+	},
+})
+
 lsp.nvim_workspace()
 
 lsp.setup()
@@ -226,7 +242,7 @@ require("mason-null-ls").setup({
 -- See `:help nvim-treesitter`
 require("nvim-treesitter.configs").setup({
 	-- Add languages to be installed here that you want installed for treesitter
-	ensure_installed = { "lua", "python", "rust", "typescript", "vimdoc", "vim", "tsx" },
+	ensure_installed = { "lua", "python", "rust", "typescript", "vimdoc", "vim", "tsx", "prisma" },
 
 	autotag = { enable = true },
 	autopairs = { enable = true },
