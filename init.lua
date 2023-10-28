@@ -128,16 +128,24 @@ require('lazy').setup({
 
         -- don't override the built-in and fugitive keymaps
         local gs = package.loaded.gitsigns
-        vim.keymap.set({'n', 'v'}, ']c', function()
-          if vim.wo.diff then return ']c' end
-          vim.schedule(function() gs.next_hunk() end)
+        vim.keymap.set({ 'n', 'v' }, ']c', function()
+          if vim.wo.diff then
+            return ']c'
+          end
+          vim.schedule(function()
+            gs.next_hunk()
+          end)
           return '<Ignore>'
-        end, {expr=true, buffer = bufnr, desc = "Jump to next hunk"})
-        vim.keymap.set({'n', 'v'}, '[c', function()
-          if vim.wo.diff then return '[c' end
-          vim.schedule(function() gs.prev_hunk() end)
+        end, { expr = true, buffer = bufnr, desc = 'Jump to next hunk' })
+        vim.keymap.set({ 'n', 'v' }, '[c', function()
+          if vim.wo.diff then
+            return '[c'
+          end
+          vim.schedule(function()
+            gs.prev_hunk()
+          end)
           return '<Ignore>'
-        end, {expr=true, buffer = bufnr, desc = "Jump to previous hunk"})
+        end, { expr = true, buffer = bufnr, desc = 'Jump to previous hunk' })
       end,
     },
   },
@@ -162,6 +170,9 @@ require('lazy').setup({
         component_separators = '|',
         section_separators = '',
       },
+      sections = {
+        lualine_c = { { 'filename', path = 1 } },
+      },
     },
   },
 
@@ -170,7 +181,7 @@ require('lazy').setup({
     'lukas-reineke/indent-blankline.nvim',
     -- Enable `lukas-reineke/indent-blankline.nvim`
     -- See `:help indent_blankline.txt`
-    main = "ibl",
+    main = 'ibl',
     opts = {},
   },
 
@@ -207,6 +218,9 @@ require('lazy').setup({
     build = ':TSUpdate',
   },
 
+  -- Formating
+  { 'jose-elias-alvarez/null-ls.nvim' },
+  { 'jay-babu/mason-null-ls.nvim' },
   -- NOTE: Next Step on Your Neovim Journey: Add/Configure additional "plugins" for kickstart
   --       These are some example plugins that I've included in the kickstart repository.
   --       Uncomment any of the lines below to enable them.
@@ -238,7 +252,7 @@ vim.o.mouse = 'a'
 -- Sync clipboard between OS and Neovim.
 --  Remove this option if you want your OS clipboard to remain independent.
 --  See `:help 'clipboard'`
-vim.o.clipboard = 'unnamedplus'
+-- vim.o.clipboard = 'unnamedplus'
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -265,9 +279,29 @@ vim.o.termguicolors = true
 
 -- [[ Basic Keymaps ]]
 
+-- Clipboard helpers
+vim.keymap.set('n', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+vim.keymap.set('v', '<leader>y', '"+y', { desc = 'Copy to clipboard' })
+vim.keymap.set('n', '<leader>Y', '"+Y', { desc = 'Copy to clipboard' })
+
+vim.keymap.set('n', '<leader>d', '"_d', { desc = 'Cut to clipboard' })
+vim.keymap.set('v', '<leader>d', '"_d', { desc = 'Cut to clipboard' })
+vim.keymap.set('x', '<leader>p', '"_dP', { desc = 'Paste over selection' })
+
+vim.keymap.set('n', 'J', 'mzJ`z', { desc = 'Join lines' })
+
+vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
+vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
+vim.keymap.set('n', 'n', 'nzzzv', { desc = 'Find next and center' })
+vim.keymap.set('n', 'N', 'Nzzzv', { desc = 'Find previous and center' })
+
+-- Define display explorer command
+vim.keymap.set('n', '<leader>pv', vim.cmd.Ex, { desc = '[P]roject [V]iew' })
+
 -- Keymaps for better default experience
 -- See `:help vim.keymap.set()`
 vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
+vim.keymap.set('n', 'Q', '<nop>')
 
 -- Remap for dealing with word wrap
 vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
@@ -302,6 +336,7 @@ pcall(require('telescope').load_extension, 'fzf')
 
 -- See `:help telescope.builtin`
 vim.keymap.set('n', '<leader>?', require('telescope.builtin').oldfiles, { desc = '[?] Find recently opened files' })
+vim.keymap.set('n', '<leader>gs', require('telescope.builtin').git_status, { desc = '[G]it [S]tatus Find updated git files' })
 vim.keymap.set('n', '<leader><space>', require('telescope.builtin').buffers, { desc = '[ ] Find existing buffers' })
 vim.keymap.set('n', '<leader>/', function()
   -- You can pass additional configuration to telescope to change theme, layout, etc.
@@ -326,10 +361,10 @@ vim.defer_fn(function()
   require('nvim-treesitter.configs').setup {
     -- Add languages to be installed here that you want installed for treesitter
     ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'tsx', 'javascript', 'typescript', 'vimdoc', 'vim' },
-  
+
     -- Autoinstall languages that are not installed. Defaults to false (but you can change for yourself!)
     auto_install = false,
-  
+
     highlight = { enable = true },
     indent = { enable = true },
     incremental_selection = {
@@ -440,7 +475,7 @@ local on_attach = function(_, bufnr)
 end
 
 -- document existing key chains
-require('which-key').register({
+require('which-key').register {
   ['<leader>c'] = { name = '[C]ode', _ = 'which_key_ignore' },
   ['<leader>d'] = { name = '[D]ocument', _ = 'which_key_ignore' },
   ['<leader>g'] = { name = '[G]it', _ = 'which_key_ignore' },
@@ -448,7 +483,66 @@ require('which-key').register({
   ['<leader>r'] = { name = '[R]ename', _ = 'which_key_ignore' },
   ['<leader>s'] = { name = '[S]earch', _ = 'which_key_ignore' },
   ['<leader>w'] = { name = '[W]orkspace', _ = 'which_key_ignore' },
+}
+
+-- Format using null ls
+local formatGrp = vim.api.nvim_create_augroup('FormattingGroup', { clear = true })
+
+vim.api.nvim_create_autocmd('BufWritePre', {
+  command = 'NullFormat',
+  group = formatGrp,
 })
+
+-- Start Import sorter
+local function format_imports()
+  vim.cmd 'write'
+  vim.fn.system('format-imports ' .. vim.fn.expand '%')
+  vim.cmd 'e!'
+  vim.notify 'Formatted imports'
+end
+
+vim.keymap.set('n', '<leader>o', format_imports, { noremap = true, silent = true, desc = 'Format imports' })
+-- End Import sorter
+
+local null_ls = require 'null-ls'
+-- local null_opts = lsp.build_options("null-ls", {})
+
+null_ls.setup {
+  on_attach = function(client, bufnr)
+    -- null_opts.on_attach(client, bufnr)
+
+    local format_cmd = function(input)
+      vim.lsp.buf.format {
+        id = client.id,
+        timeout_ms = 5000,
+        async = input.bang,
+      }
+    end
+
+    local bufcmd = vim.api.nvim_buf_create_user_command
+    bufcmd(bufnr, 'NullFormat', format_cmd, {
+      bang = true,
+      range = true,
+      desc = 'Format using null-ls',
+    })
+  end,
+  sources = {
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.prettier,
+    -- null_ls.builtins.diagnostics.cspell.with({
+    -- 	filetypes = { "typescript", "markdown", "typescriptreact" },
+    -- }),
+    -- null_ls.builtins.code_actions.cspell.with({
+    -- 	filetypes = { "typescript", "markdown", "typescriptreact" },
+    -- }),
+  },
+}
+
+require('mason-null-ls').setup {
+  ensure_installed = nil,
+  automatic_installation = true,
+  automatic_setup = false,
+}
 
 -- Enable the following language servers
 --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
@@ -496,7 +590,7 @@ mason_lspconfig.setup_handlers {
       settings = servers[server_name],
       filetypes = (servers[server_name] or {}).filetypes,
     }
-  end
+  end,
 }
 
 -- [[ Configure nvim-cmp ]]
