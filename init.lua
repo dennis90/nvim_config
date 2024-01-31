@@ -59,10 +59,6 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Set background transparent
---vim.opt.highlight.Normal.ctermbg = 'none'
---vim.opt.highlight.NonText.ctermbg = 'none'
-
 -- NOTE: Here is where you install your plugins.
 --  You can configure plugins using the `config` key.
 --
@@ -74,49 +70,6 @@ require('lazy').setup({
   -- Git related plugins
   'tpope/vim-fugitive',
   'tpope/vim-rhubarb',
-
-  -- Leap
-  {
-    'ggandor/leap.nvim',
-    dependencies = {
-      'tpope/vim-repeat',
-    },
-
-    config = function()
-      require('leap').add_default_mappings()
-    end,
-  },
-
-  -- Surround
-  {
-    'kylechui/nvim-surround',
-    version = '*', -- Use for stability; omit to use `main` branch for the latest features
-    event = 'VeryLazy',
-    config = function()
-      require('nvim-surround').setup {
-        -- Configuration here, or leave empty to use defaults
-      }
-    end,
-  },
-
-  -- Spectre
-  {
-    'nvim-pack/nvim-spectre',
-    config = function()
-      vim.keymap.set('n', '<leader>S', '<cmd>lua require("spectre").toggle()<CR>', {
-        desc = 'Toggle Spectre',
-      })
-      vim.keymap.set('n', '<leader>sw', '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
-        desc = 'Search current word',
-      })
-      vim.keymap.set('v', '<leader>sw', '<esc><cmd>lua require("spectre").open_visual()<CR>', {
-        desc = 'Search current word',
-      })
-      vim.keymap.set('n', '<leader>sp', '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-        desc = 'Search on current file',
-      })
-    end,
-  },
 
   -- Detect tabstop and shiftwidth automatically
   'tpope/vim-sleuth',
@@ -198,19 +151,6 @@ require('lazy').setup({
   },
 
   {
-    -- Theme inspired by Atom
-    'navarasu/onedark.nvim',
-    priority = 1000,
-    config = function()
-      vim.cmd.colorscheme 'onedark'
-      vim.cmd 'highlight Normal guibg=none'
-      vim.cmd 'highlight NonText guibg=none'
-      vim.cmd 'highlight Normal ctermbg=none'
-      vim.cmd 'highlight NonText ctermbg=none'
-    end,
-  },
-
-  {
     -- Set lualine as statusline
     'nvim-lualine/lualine.nvim',
     -- See `:help lualine.txt`
@@ -267,15 +207,6 @@ require('lazy').setup({
   },
 
   {
-    'github/copilot.vim',
-    config = function()
-      -- Set copilot settings to use C-j to autocomplete
-      vim.g.copilot_no_tab_map = true
-      vim.api.nvim_set_keymap('i', '<C-J>', 'copilot#Accept("<CR>")', { silent = true, expr = true })
-    end,
-  },
-
-  {
     -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     dependencies = {
@@ -299,7 +230,7 @@ require('lazy').setup({
   --    Uncomment the following line and add your plugins to `lua/custom/plugins/*.lua` to get going.
   --
   --    For additional information see: https://github.com/folke/lazy.nvim#-structuring-your-plugins
-  -- { import = 'custom.plugins' },
+  { import = 'custom.plugins' },
 }, {})
 
 -- [[ Setting options ]]
